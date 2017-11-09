@@ -40,11 +40,11 @@ imageIds = []
 for filenames, images in image_iterator:
     print ("current batch size:",len(filenames))
     adversarial_samples = sess.run(gen_adversarial_sample,feed_dict={inceptionV3.x_input:images})[:len(filenames)]
-    predictions = sess.run([inceptionV3.predicts,sm],feed_dict={inceptionV3.x_input:images})[:len(filenames)]
+    predictions = sess.run([inceptionV3.predicts,sm],feed_dict={inceptionV3.x_input:images})
     adversarial_predictions = sess.run(inceptionV3.predicts,feed_dict={inceptionV3.x_input:adversarial_samples})[:len(filenames)]
 
     imageIds+=list(map(lambda x: x[:-4],filenames))
-    predictedIds+=list(predictions)
+    predictedIds+=list(predictions[0][:len(filenames)])
     adversarialPredictedIds+=list(adversarial_predictions)
 
     for adv,fn in zip(adversarial_samples,filenames):
